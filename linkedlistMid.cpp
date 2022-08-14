@@ -97,20 +97,41 @@ void make_cycle(Node *&head, int pos)
     }
     temp->next = startNode;
 }
-bool detect_cycle(Node* &head)
+bool detect_cycle(Node *&head)
 {
-    Node* slow = head;
-    Node* fast = head;
+    Node *slow = head;
+    Node *fast = head;
     while (fast != NULL && fast->next != NULL)
     {
         slow = slow->next;
         fast = fast->next->next;
-        if(slow->next == fast->next)
+        if (slow->next == fast->next)
         {
             return true;
         }
     }
     return false;
+}
+void remove_cycle(Node* &head)
+{
+    Node* slow = head;
+    Node* fast = head;
+
+    //step 1: fast=slow
+    do{
+        slow = slow->next;
+        fast = fast->next->next;
+    }while(slow!=fast);
+    //step-2: re initializaton fast
+    fast = head;
+    //step -3: fast-> next =slow -> next
+    while(slow->next!=fast->next)
+    {
+        slow = slow->next;
+        fast = fast->next;
+    }
+    //step-4:
+    slow->next = NULL;
 }
 int main()
 {
@@ -123,7 +144,8 @@ int main()
          << "Choice: 3 - Find Linked list Mid(slow and fast) " << endl
          << "Choice: 4 - Linked list cycle kth position " << endl
          << "Choice: 5 - Linked list detect cycle " << endl
-         << "Choice: 6 - Exit" << endl;
+         << "Choice: 6 - Remove cycle a from linked list " << endl
+         << "Choice: 7  - Exit" << endl;
     int choice;
     cout << "Next Choice: ";
     cin >> choice;
@@ -159,16 +181,27 @@ int main()
             cin >> pos;
             make_cycle(head, pos);
             break;
-            case 5:
+        case 5:
             bool cyclestatus;
             cyclestatus = detect_cycle(head);
-            if(cyclestatus == true)
+            if (cyclestatus == true)
             {
-                cout<<"There is cycle in the linked list"<<endl;
+                cout << "There is cycle in the linked list" << endl;
             }
             else
             {
-                cout<<"There is no cycle in the linked list"<<endl;
+                cout << "There is no cycle in the linked list" << endl;
+            }
+            break;
+        case 6:
+            cyclestatus = detect_cycle(head);
+            if (cyclestatus == true)
+            {
+                remove_cycle(head);
+            }
+            else
+            {
+                cout << "There is no cycle in the linked list" << endl;
             }
             break;
         default:
