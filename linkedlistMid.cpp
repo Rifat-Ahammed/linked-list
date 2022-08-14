@@ -1,4 +1,3 @@
-
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -71,14 +70,47 @@ int find_mid(Node *&head)
     {
         return -1;
     }
+    int count = 0;
     Node *slow = head;
     Node *fast = head;
     while (fast != NULL && fast->next != NULL)
     {
         slow = slow->next;
         fast = fast->next->next;
+        count++;
     }
     return slow->value;
+}
+void make_cycle(Node *&head, int pos)
+{
+    Node *temp = head;
+    Node *startNode;
+    int count = 1;
+    while (temp->next != NULL)
+    {
+        if (count == pos)
+        {
+            startNode = temp;
+        }
+        temp = temp->next;
+        count++;
+    }
+    temp->next = startNode;
+}
+bool detect_cycle(Node* &head)
+{
+    Node* slow = head;
+    Node* fast = head;
+    while (fast != NULL && fast->next != NULL)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+        if(slow->next == fast->next)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 int main()
 {
@@ -89,7 +121,9 @@ int main()
     cout << "Choice: 1 - Insert_at_head " << endl
          << "Choice: 2 - Insert_at_tail " << endl
          << "Choice: 3 - Find Linked list Mid(slow and fast) " << endl
-         << "Choice: 4 - Exit" << endl;
+         << "Choice: 4 - Linked list cycle kth position " << endl
+         << "Choice: 5 - Linked list detect cycle " << endl
+         << "Choice: 6 - Exit" << endl;
     int choice;
     cout << "Next Choice: ";
     cin >> choice;
@@ -118,6 +152,23 @@ int main()
             else
             {
                 cout << "Mid is value is: " << mid << endl;
+            }
+            break;
+        case 4:
+            cout << "Enter a value for position: ";
+            cin >> pos;
+            make_cycle(head, pos);
+            break;
+            case 5:
+            bool cyclestatus;
+            cyclestatus = detect_cycle(head);
+            if(cyclestatus == true)
+            {
+                cout<<"There is cycle in the linked list"<<endl;
+            }
+            else
+            {
+                cout<<"There is no cycle in the linked list"<<endl;
             }
             break;
         default:
